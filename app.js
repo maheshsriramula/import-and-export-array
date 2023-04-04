@@ -51,55 +51,19 @@ app.get("/players/", async (request, response) => {
 });
 
 app.post("/players/", async (request, response) => {
-  try {
-    const playersDetails = request.body;
-    const { player_id, player_name, jersey_number, role } = playersDetails;
-    const addPlayerDetails = `
+  const playerDetails = request.body;
+  const { playerId, playerName, jerseyNumber, role } = playerDetails;
+  const addPlayerDetails = `
     INSERT INTO
       cricket_team (player_id, player_name, jersey_number, role)
     VALUES
       (
-         ${playersDetails.player_id},
-        '${playersDetails.player_name}',
-         ${playersDetails.jersey_number},
-        '${playersDetails.role}'
+         ${playerId},
+        '${playerName}',
+         ${jerseyNumber},
+        '${role}'
       );`;
 
-    const dbResponse = await db.run(addPlayerDetails);
-    response.send("Player Added to Team");
-  } catch (e) {
-    console.log(`DB Error:${e.message}`);
-  }
+  const dbResponse = await db.run(addPlayerDetails);
+  response.send("Player Added to Team");
 });
-
-app.get("/players/:playerId/", async (request, response) => {
-  const { playerId } = request.params;
-  const getPlayerId = `
-    SELECT
-      *
-    FROM
-      cricket_team
-    WHERE
-      player_id = ${playerId};`;
-  const player = await db.get(getPlayerId);
-  response.send(player);
-});
-
-app.put("/players/:playerId/", async (request, response) => {
-  const { playerId } = request.params;
-  const playerDetails = request.body;
-  const { playerName, jerseyNumber, role } = playerDetails;
-  const updatePlayerDetails = `
-    UPDATE
-      cricket_team
-    SET
-    player_name = ${playerName},
-    jersey_number = ${jerseyNumber},
-    role = ${role}
-    WHERE
-      player_id = ${playerId};`;
-  await db.run(updatePlayerDetails);
-  response.send("Player Details Updated");
-});
-
-module.exports = app;

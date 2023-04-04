@@ -1,20 +1,7 @@
+
+
 GET http://localhost:3000/players/
 
 ###
 
 POST http://localhost:3000/players/
-
-
-###
-
-GET http://localhost:3000/players/1/
-
-###
-
-
-PUT http://localhost:3000/players/8/
-
-
-###
-
-
